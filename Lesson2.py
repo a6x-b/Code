@@ -1,6 +1,11 @@
-x = 60
+x = 60 #stores a value (60) to x
 y = 9
-print(x + y)
-print(y ** 2 - x)
-print(_ + 48)
-Life = 'Youtube'
+x + y
+y ** 2 - x
+# _ + 48 work only on commands (IDLE)
+Company = 'Youtube'
+print(Company)
+print(Company[0])
+print(Company[0:2])
+print(Company[5:69])
+print(Company[:2]*2)
