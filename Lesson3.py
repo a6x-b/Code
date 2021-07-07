@@ -17,4 +17,4 @@ print(Set)
 print(Set)
 Ip = (192,168,1,1) #Tuples are only-read lists
 ####Dictionarys ######
-MyData = {'Name': 'Abdullah', 'Age': 14}
+MyData = {'Name': 'Abdullah', 'Age': 14, 'City': 'Dammam', 'Phone Number': '0501436699' }
