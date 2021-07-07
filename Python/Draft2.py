@@ -1,4 +1,4 @@
-def Welcome-Screen
+#Put function here
 
 print('Hello Client Welcome to the no purpose login please choose from the menu.')
 print('1.Log in to your account')
