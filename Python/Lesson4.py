@@ -27,3 +27,8 @@ print(Variable1 <= Variable2)
 print(Variable1 >= Variable2)
 print(Variable1 == Variable2)
 print(Variable1 != Variable2)
+
+Number = int(input("Any decimal pls\n"))
+print('The Binary value of '+ str(Number) +' is '+bin(Number)+'.')
+print('The Octal value of '+ str(Number) +' is '+oct(Number)+'.')
+print('The HexaDecimal value of '+ str(Number) +' is '+hex(Number)+'.')
