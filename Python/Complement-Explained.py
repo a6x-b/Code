@@ -26,3 +26,4 @@ print(~14)
 print(5 | 87) #This is OR
 print(5 & 87) #This is AND
 #ALso What comes first it doesn't matter (same as + and *)
+print(int(0b1111))
