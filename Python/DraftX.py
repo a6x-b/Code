@@ -1,34 +1,51 @@
-
-from time import sleep as Wait
-
 Usernames =[]
-pwd = []
+Passwords = []
 Names = []
 Ages = []
-class Account:
-    def __init__(self, User, name, age, Password):
-        self.User = str(User)
-        self.Name = str(name)
-        self.Age = int(age)
-        self.Pwd = str(Password)
-if input('Method Pls: ') == 'New':
-    
-    Sign_Username = input('Username: ')
-    Sign_Password= input('Password: ')
-    Sign_Name = input('Name: ')
-    Sign_Age = input('Age: ')
+def SignUp(Sign_Username, Sign_Password, Sign_Name, Sign_Age,user):
     if Sign_Username not in Usernames:
         print('You\'re Signed up Successfully!')
+        Usernames.append(Sign_Username)
+        Passwords.append(Sign_Password)
+        Names.append(Sign_Name)
+        Ages.append(Sign_Age)
         user = Account(Sign_Username, Sign_Name, Sign_Age, Sign_Password)
-        
-elif input() == 'Login':
-    logged = False
-    while not logged:
-        login_username = input('Please enter your username: ')
-        login_password = input('Please enter your password: ')
-        if login_username in Usernames:
-            
-            user =
-#add append to sign up and make a loop and complete the if statment
+        return user
+
+from time import sleep as Wait
+while True:
+    class Account:
+        def __init__(self, User, name, age, Password):
+            self.User = str(User)
+            self.Name = str(name)
+            self.Age = int(age)
+            self.Pwd = str(Password)
+    Menu = input('Method Please: ')
+    #user = Account('', '', 0, '')    
+    if Menu == 'New':
+        Sign_Username = input('Username: ')
+        Sign_Password= input('Password: ')
+        Sign_Name = input('Name: ')
+        Sign_Age = int(input('Age: '))
+        user = Account('', '', 0, '')    
+        SignUp(Sign_Username, Sign_Password, Sign_Name, Sign_Age, user)
+        print(user.User, user.Pwd)
+    elif Menu == 'Login':
+        logged = False
+        while not logged:
+            login_username = str(input('Please enter your username: '))
+            login_password = str(input('Please enter your password: '))
+            if login_username in Usernames:
+                i = 0
+                while login_username != Usernames[i]:
+                    i = i+1
+                else:
+                    user = Account(login_username, Names[i], Ages[i], Passwords[i])
+                    logged = True
+            else:
+                print('Sorry, but Username or password is not correct.')
+    elif Menu == 'Exit':
+        break
+#add append to sign up) and make a loop and complete the if statment also user =
 Wait(2)
 
