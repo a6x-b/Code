@@ -4,7 +4,7 @@ Names = []
 Ages = []
 def SignUp(Sign_Username, Sign_Password, Sign_Name, Sign_Age,user):
     if Sign_Username not in Usernames:
-        print('You\'re Signed up Successfully!')
+        print('You\'ve Signed up Successfully!')
         Usernames.append(Sign_Username)
         Passwords.append(Sign_Password)
         Names.append(Sign_Name)
@@ -12,6 +12,7 @@ def SignUp(Sign_Username, Sign_Password, Sign_Name, Sign_Age,user):
         user = Account(Sign_Username, Sign_Name, Sign_Age, Sign_Password)
         return user
 
+logged = False
 from time import sleep as Wait
 while True:
     class Account:
@@ -27,11 +28,16 @@ while True:
         Sign_Password= input('Password: ')
         Sign_Name = input('Name: ')
         Sign_Age = int(input('Age: '))
-        user = Account('', '', 0, '')    
-        SignUp(Sign_Username, Sign_Password, Sign_Name, Sign_Age, user)
-        print(user.User, user.Pwd)
+        #user = Account('', '', 0, '')    
+        if Sign_Username not in Usernames:
+                print('You\'ve Signed up Successfully!')
+                Usernames.append(Sign_Username)
+                Passwords.append(Sign_Password)
+                Names.append(Sign_Name)
+                Ages.append(Sign_Age)
+                user = Account(Sign_Username, Sign_Name, Sign_Age, Sign_Password)
+        logged = True
     elif Menu == 'Login':
-        logged = False
         while not logged:
             login_username = str(input('Please enter your username: '))
             login_password = str(input('Please enter your password: '))
@@ -44,8 +50,10 @@ while True:
                     logged = True
             else:
                 print('Sorry, but Username or password is not correct.')
+        else:
+            print(f"You're already Logged in with {user.User}")
     elif Menu == 'Exit':
         break
-#add append to sign up) and make a loop and complete the if statment also user =
+#i just need to store the data somewhere else so it don't get reset
 Wait(2)
 
