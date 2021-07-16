@@ -3,9 +3,10 @@ from time import sleep
 from os import system
 GUI = Tk()
 def DaClick():
-    for i in range(5,0,-1):
-        Warning = Label(GUI, text=f'{i}')
+    for i in range(5):
+        Warning = Label(GUI, text=f'{5-i}')
         Warning.pack()
-    system('shutdown -s')
+        sleep(1)
+    system('shutdown  /s /t 1')
 DaBooton = Button(GUI, text='Click ME!',command=DaClick(),fg='Blue',bg='Yellow')
 DaBooton.pack()
