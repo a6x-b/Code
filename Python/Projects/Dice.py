@@ -8,9 +8,10 @@ def DaMenu():
     print('B. multiple dices throw')
     print('C. Amount of throws for a specific number (result)')
     print('=========================')
-    Main_Menu = str(input()).upper
+    Main_Menu = (str(input())).upper
     return Main_Menu
 Main_Menu = DaMenu()
+print(Main_Menu)
 if Main_Menu == 'A':
     print('Please choose the amount of sides on the dice')
     print('4 Sides')
