@@ -10,11 +10,9 @@ function Show_book(Book_Pos) {
     console.log('Book quantity: '+ Book_Pos[4])
 };
 function Book_search(search_key) {
-    let Temporary;
     for (let i = 0; i < storage.length; i++) {
         for (let j = 0; j < 3; j++) {
-            Temporary = storage[i][j];
-            if (Temporary == search_key) {
+            if (storage[i][j] == search_key) {
                 return storage[i];
             };
         };
@@ -31,6 +29,6 @@ let storage = [
     ['AAE', "You don't know JS", 'Kyle Simpson', 39.9, 9]
 ]
 
-let search_key = 'ACB';
+let search_key = 'AAE';
 console.log('Searching for the with following information '+ search_key);
 Show_book(Book_search(search_key));
