@@ -1,3 +1,17 @@
 img{
     border-radius: 50%; height: 150px;
 }
+.CodLang {
+    color: rgb(0, 102, 204);
+    position: relative;
+    text-decoration: none;
+
+}
+.CodLang:hover::after {
+    content: "";
+    position: absolute;
+    left: 25%;
+    right: 25%;
+    bottom: 0;
+    border: 1px solid black;
+}
