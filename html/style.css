@@ -15,3 +15,35 @@ img{
     bottom: 0;
     border: 1px solid black;
 }
+.title {
+    text-align: center;
+    border: purple solid 5px;
+    background-color: aqua;
+    display: inline;
+    font-size: xx-large;
+    font-style: ;
+}
+@font-face {
+    font-family: Apple_Font;
+    src: url(assets/fonts/ENAFOnt.ttf);
+}
+@font-face {
+    font-family: Apple_Font;
+    src: url(assets/fonts/AFOnt.ttf);
+}
+div {
+    border: solid black thin ;
+    margin: 50px;
+}
+html {
+    font-family: Apple_Font;
+}
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.Myname{
+    text-align: center;
+    font-size: xxx-large;
+}
