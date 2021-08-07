@@ -1,49 +1,30 @@
-img{
-    border-radius: 50%; height: 150px;
-}
-.CodLang {
-    color: rgb(0, 102, 204);
-    position: relative;
-    text-decoration: none;
-
-}
-.CodLang:hover::after {
-    content: "";
-    position: absolute;
-    left: 25%;
-    right: 25%;
-    bottom: 0;
-    border: 1px solid black;
-}
-.title {
-    text-align: center;
-    border: purple solid 5px;
-    background-color: aqua;
-    display: inline;
-    font-size: xx-large;
-    font-style: ;
+@font-face {
+    src: url(assets/fonts/AFOnt.ttf);
+    font-family: Apple Font;
 }
 @font-face {
-    font-family: Apple_Font;
+    font-family: Apple Font;
     src: url(assets/fonts/ENAFOnt.ttf);
 }
-@font-face {
-    font-family: Apple_Font;
-    src: url(assets/fonts/AFOnt.ttf);
+html{
+    font-family: Apple Font;
 }
-div {
-    border: solid black thin ;
-    margin: 50px;
-}
-html {
-    font-family: Apple_Font;
-}
-.center {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
-.Myname{
+div.Mytitle{
+    border: 10px solid purple;
+    width: 25%;
+    padding-left: 2.5%;
+    padding-right: 2.5%;
     text-align: center;
-    font-size: xxx-large;
+    background-color: aqua;
+    font-size: xx-large;
+    border-radius: 25px;
+    white-space: nowrap;
+}
+.center{
+    display: block;
+    margin: auto;
+}
+.icloud{
+    height: 20%;
+    width: 20%;
 }
