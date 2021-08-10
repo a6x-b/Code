@@ -59,6 +59,7 @@ let Decimal = 15; //decimal
 let Hexadecimal = 0xF; //Hexadecimal
 let Octal = 0o17; //octal
 let Binary = 0b01111; //binary
-let Numberic_System = [Decimal,Hexadecimal,Octal, Binary]    
-for (let i in Numberic_System) {
-    console.log(Numberic_System[i])};
+let Numberic_System = [Decimal,Hexadecimal,Octal, Binary];
+Numberic_System.forEach(i => {
+    console.log(i)
+});
