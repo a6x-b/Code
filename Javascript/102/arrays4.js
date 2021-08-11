@@ -44,5 +44,5 @@ Before: ${numbers}\nAfter: ${mappedarr}`);
 mynamerr = 'abdullah atyah ali alzhrani'
 console.log(`.split() splites the string into elements each time it passes specific charater`);
 console.log(`${mynamerr} This is a string rn`);
-mynamerr = mynamerr.split(' ')
+mynamerr = mynamerr.split(' ');
 console.log(`After splitting \n${mynamerr}`);
