@@ -11,6 +11,7 @@ int main()
         Uppers += Input;
         cin >> Input;
         Lowers += Input;
+        
     }
     if(Uppers%2==0 && Lowers%2==0)
         cout << 0;
