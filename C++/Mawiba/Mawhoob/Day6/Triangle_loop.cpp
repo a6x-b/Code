@@ -3,16 +3,13 @@ using namespace std;
 
 int main()
 {
-    int Base,Counter = 0;
+    int Base;
     cout<<"Enter the base ";
     cin>>Base;
-    while (Counter<Base)
+    for (int Counter = 0; Counter<Base;Counter++)
     {
-        Counter++;
         for (int Stars = 0; Stars < Counter; Stars++)
-    {
-        cout<<"*";
-    }
+            cout<<"*";
     cout<<endl;
     }
     return 0;

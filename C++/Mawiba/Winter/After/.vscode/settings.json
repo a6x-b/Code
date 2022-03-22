@@ -2,16 +2,15 @@
     "files.associations": {
         "*.cpp": "cpp",
         "iostream": "cpp",
+        "cmath": "cpp",
+        "complex": "cpp",
         "ostream": "cpp",
-        "initializer_list": "cpp",
         "xstring": "cpp",
-        "xutility": "cpp",
         "algorithm": "cpp",
         "atomic": "cpp",
         "bit": "cpp",
         "cctype": "cpp",
         "clocale": "cpp",
-        "cmath": "cpp",
         "compare": "cpp",
         "concepts": "cpp",
         "cstddef": "cpp",
@@ -22,7 +21,7 @@
         "ctime": "cpp",
         "cwchar": "cpp",
         "exception": "cpp",
-        "iomanip": "cpp",
+        "initializer_list": "cpp",
         "ios": "cpp",
         "iosfwd": "cpp",
         "istream": "cpp",
@@ -41,11 +40,10 @@
         "xiosbase": "cpp",
         "xlocale": "cpp",
         "xlocinfo": "cpp",
-        "xlocmon": "cpp",
         "xlocnum": "cpp",
-        "xloctime": "cpp",
         "xmemory": "cpp",
         "xstddef": "cpp",
-        "xtr1common": "cpp"
+        "xtr1common": "cpp",
+        "xutility": "cpp"
     }
 }
