@@ -1,0 +1,56 @@
+== 
+cin.ignore(); -- {uses with getline(cin,string_var)} (it flushes the input, so the enter after the test cases input)
+/**
+
+cin >> Test_Cases;
+cin.ignore();
+while (Test_Cases--)
+{
+    string FullName;
+    getline(cin, FullName);
+    cout << FullName << endl;
+}
+
+**/
+===
+
+==
+string1 += string2 -- {it cont to each other} (string1 = "Hell" string2 = "o" string1 += string2 = "Hello")
+
+string.find()
+===
+
+Vectors
+{
+    ==
+    syntax: vector<size_t> Name (Size, Initilize value);
+    methods: {
+        .push_back
+    }
+    ===
+}
+
+==
+Structure: it is kind of class.
+{
+    every object must have the same properties as the other objects but it doesn't matter the value.
+    {
+        struct Student
+        {
+            string name;
+            int age;
+            double GPA;
+        }
+        also we can make an array or a vector with it.
+        vector<Student> STD1 = ("abdul",15,99.69);
+    }    
+}
+------------------
+t7ya said that i can input array faster with:
+for (auto i : a)
+    cin >> i;
+---------
+also there is something called min_element(A, A + N);
+
+max_element(A,A+N) - A; // This will return the index of the first intance of the maximum value
+*min_element(A,A+N); // this will return the minimum value in the range

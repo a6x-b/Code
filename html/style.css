@@ -1,0 +1,88 @@
+::-webkit-scrollbar{
+    width: 10px;
+}
+::-webkit-scrollbar-track{
+    background: #00cc99;
+    border-radius: 50px;
+}
+::-webkit-scrollbar-thumb{
+    background: #6600ff;
+    border-radius: 50px;
+    width: 10px;
+}
+@font-face {
+    font-family: Apple Font;
+    src: url(assets/fonts/AFOnt.ttf);
+}
+@font-face {
+    font-family: Apple Font;
+    src: url(assets/fonts/sf-pro-display_semibold.woff2);
+}
+html{
+    font-family: Apple Font;
+    
+}
+div.Mytitle{
+    border: 10px solid purple;
+    width: 25%;
+    padding-left: 2.5%;
+    padding-right: 2.5%;
+    text-align: center;
+    background-color: aqua;
+    font-size: 2rem ;
+    border-radius: 25px;
+    white-space: nowrap;
+    margin-bottom: 25px;
+}
+.center{
+    display: block;
+    margin: auto;
+}
+div.Mytitle span#Header1{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: xxx-large;
+    white-space: pre-line;
+    font-weight: bold;
+    display: block;
+}
+.icloud{
+    height: 15%;
+    width: 15%;
+    margin-top: 10px;
+}
+.meinfo{
+    font-size: 1cm;
+    padding-right: 2px;
+}
+.CodeLang{
+    font-size: 0.9cm;
+}
+ul.CodeLang a.CodeLang {
+    color: rgb(0, 102, 204);
+    position: relative;
+    text-decoration: none;
+    direction: ltr;
+}
+ul a.CodeLang:hover::after {
+    content: "";
+    position: absolute;
+    left: 25%;
+    right: 25%;
+    bottom: 0;
+    border: 1px solid black;
+}
+div.TheInfo{
+    margin-bottom: 10px;
+    border: solid black 5px;
+    border-radius: 20px;
+}
+h1#MyName{
+    text-align: center;
+    font-size: xxx-large;
+}
+img {
+    height: 25%;
+    width: 25%;
+    border-radius: 25%;
+}

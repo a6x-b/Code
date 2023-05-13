@@ -1,0 +1,1 @@
+module.exports = { Time_STOP: 5, TimeStopped: false };
