@@ -2,12 +2,12 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const { token } = require('./config.json');
-let { Time_STOP } = require('./Global_Vars');
 
 const client = new Client({ intents: [
 	GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMembers,
     GatewayIntentBits.GuildMessages,
+	GatewayIntentBits.GuildVoiceStates,
     GatewayIntentBits.MessageContent] });
 module.exports.client = client;
 

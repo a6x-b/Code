@@ -1,12 +1,17 @@
 const { Events } = require('discord.js');
-const { deployCommands } = require('../deploy_commands.js');
+const { deployCommands } = require('../deployCommands.js');
+const { client } = require('../index.js');
+const { createAudioPlayer } = require('@discordjs/voice');
 
 module.exports = {
 	name: Events.ClientReady,
 	once: true,
-	execute(client) {
+	execute() {
 		console.log(`[INFO] Logged in as ${client.user.tag}`);
 		console.log('[INFO] Running "deploy_commands.js"');
 		deployCommands();
+		client.user.setPresence({ activities: [{ name: 'with time', url:'https://youtube.com' }], status: 'online' });
+		console.log('[INFO] Setted RPC.');
+		global.audioPlayer = createAudioPlayer();
 	},
 };

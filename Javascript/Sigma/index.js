@@ -7,8 +7,11 @@ const client = new Client({ intents: [
 	GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMembers,
     GatewayIntentBits.GuildMessages,
+	GatewayIntentBits.GuildVoiceStates,
     GatewayIntentBits.MessageContent] });
+module.exports.client = client;
 
+// Commands Init
 client.commands = new Collection();
 const foldersPath = path.join(__dirname, 'commands');
 const commandFolders = fs.readdirSync(foldersPath);
@@ -27,6 +30,7 @@ for (const folder of commandFolders) {
 	}
 }
 
+// Events Init
 const eventsPath = path.join(__dirname, 'events');
 const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
 
