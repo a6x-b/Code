@@ -32,6 +32,10 @@ module.exports = {
             const choice = interaction.options.getInteger('seconds');
             // console.log(`[DEV] choice = ${choice}`);
             // console.log(Global_Vars.Time_STOP);
+            if (choice < 5) {
+                interaction.reply({content:`You can't set the duration to ${choice} second(s), it must be 5 or above`, ephemeral: true });
+                console.log(`[WARN] ${interaction.user.tag} tried to set duration less than 5.`);
+            }
             Global_Vars.Time_STOP = choice;
             // console.log(Global_Vars.Time_STOP);
             interaction.reply({content:`The World now will stop time for ${choice} seconds`, ephemeral: true });

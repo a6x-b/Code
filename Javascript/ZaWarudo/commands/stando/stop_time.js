@@ -2,6 +2,8 @@ const { SlashCommandBuilder } = require('discord.js');
 let Global_Vars = require('../../Global_Vars.js');
 const { createAudioResource } = require('@discordjs/voice');
 const { joinVoiceChannel } = require('@discordjs/voice');
+const channels = [];
+
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('zawarudo')
@@ -22,17 +24,19 @@ module.exports = {
 			}
 			console.log('[INFO] Stopping TIME!!');
 			await interaction.reply({content:'https://tenor.com/view/diego-brando-diego-alternate-the-world-za-warudo-gif-17597363', ephemeral: true});
-			TimeStopped = true;
+			Global_Vars.TimeStopped = true;
 			// console.log(`[DEV] allChannels = ${Global_Vars.allChannels}`);
 			if (Global_Vars.allChannels) {
 				
 				interaction.guild.channels.cache.forEach((channel) => {
 					if (channel.isTextBased())
-					channel.permissionOverwrites.edit(channel.guild.roles.everyone, { ViewChannel: false });
-					channel.permissionOverwrites.edit(worldInvader, { SendMessages: false, ViewChannel: true });
-					channel.permissionOverwrites.edit(ZaWarudo, { SendMessages: true, ViewChannel: true });
+					channels.push(channel);
+					channel.permissionOverwrites.create(channel.guild.roles.everyone, { ViewChannel: false });
+					channel.permissionOverwrites.create(worldInvader, { SendMessages: false, ViewChannel: true });
+					channel.permissionOverwrites.create(ZaWarudo, { SendMessages: true, ViewChannel: true });
 				});
 			} else {
+				interaction.channel.permissionOverwrites.create(ZaWarudo, { SendMessages: true, ViewChannel: true });
 				interaction.channel.permissionOverwrites.create(interaction.channel.guild.roles.everyone, { ViewChannel: false });
 				interaction.channel.permissionOverwrites.create(worldInvader, { SendMessages: false, ViewChannel: true });
 			}
@@ -61,27 +65,28 @@ module.exports = {
 				}
 				//*/
 				try {
-					TS = createAudioResource('/Users/a6x/development/Code/Javascript/ZaWarudo/audio/ZaWarudoDiego.mp3');
+					TS = createAudioResource('./audio/ZaWarudoDiego.mp3');
 					audioPlayer.play(TS);
-					setTimeout( () => {audioPlayer.pause()}, 2000);
+					setTimeout( () => {audioPlayer.pause()}, 3000);
 				} catch (error) {
 					// await interaction.reply({content:'There was a problem in playing the audio.',ephemeral:true})
 					console.error(error);
 					console.error("[ERROR] Didn't play audio");
 				}
 			}
-			const members = interaction.member.voice.channel.members;
-    	    members.forEach(member => {
-				if (!member.user.bot) {
-					
-					if (!member.roles.cache.some((r) => r.name === "The World")) {
-						member.voice.setMute(true);
-						if (!member.roles.cache.some((r) => r.name === "World Invader")) {
-							member.voice.setDeaf(true)
+			const members = interaction.member.voice.channel?.members;
+			if (members) {
+				members.forEach(member => {
+					if (!member.user.bot) {
+						if (!member.roles.cache.some((r) => r.name === "The World")) {
+							member.voice.setMute(true);
+							if (!member.roles.cache.some((r) => r.name === "World Invader")) {
+								member.voice.setDeaf(true)
+							}
 						}
 					}
-				}
 				})
+			}
 				console.log('[INFO] Time has stopped!!');
 				
 				await interaction.channel.send("Time has stopped.").then((msg) => {setTimeout(() => msg.delete(), 3500);});
@@ -91,7 +96,7 @@ module.exports = {
 					console.log('[INFO] Time Will resume');
 					// Playing Time Resume Sound
 					try {
-						TR = createAudioResource('/Users/a6x/development/Code/Javascript/ZaWarudo/audio/DiegoResume.mp3');
+						TR = createAudioResource('./audio/DiegoResume.mp3');
 						audioPlayer.play(TR);
 						setTimeout( () => {audioPlayer.stop()}, 2000);
 					} catch (error) {
@@ -105,31 +110,34 @@ module.exports = {
 					
 					// Checks if it's all channel or just one
 					if (Global_Vars.allChannels) {
-						interaction.guild.channels.cache.forEach((channel) => {
-							if (channel.isTextBased())
-							channel.permissionOverwrites.edit(channel.guild.roles.everyone, { ViewChannel: null });
+						channels.forEach((channel) => {
+							channel.permissionOverwrites.create(channel.guild.roles.everyone, { ViewChannel: null });
 							channel.permissionOverwrites.delete(worldInvader, 'Time Resumed');
+							channel.permissionOverwrites.delete(ZaWarudo, 'Time Resumed');
 						});
 					} else {
 						interaction.channel.permissionOverwrites.edit(interaction.channel.guild.roles.everyone, { ViewChannel: null });
 						interaction.channel.permissionOverwrites.delete(worldInvader, 'Time Resumed');
+						interaction.channel.permissionOverwrites.delete(ZaWarudo, 'Time Resumed');
 					}
 					if (interaction.member.voice.channel) {
 						setTimeout(() => {
 							connection.destroy();
-						}, (Global_Vars.Time_STOP-1) * 1000);
+						}, 2000);
 					}
-					members.forEach(member => {
-						if (!member.user.bot) {
-							
-							if (!member.roles.cache.some((r) => r.name === "The World")) {
-								member.voice.setMute(false);
-								if (!member.roles.cache.some((r) => r.name === "World Invader")) {
-									member.voice.setDeaf(false)
+					if (members) {
+						members.forEach(member => {
+							if (!member.user.bot) {
+								
+								if (!member.roles.cache.some((r) => r.name === "The World")) {
+									member.voice.setMute(false);
+									if (!member.roles.cache.some((r) => r.name === "World Invader")) {
+										member.voice.setDeaf(false)
+									}
 								}
 							}
-						}
 						})
+					}
 				}, Global_Vars.Time_STOP * 1000);
 			}
 			else {
