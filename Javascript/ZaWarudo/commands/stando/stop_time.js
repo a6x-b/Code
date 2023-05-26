@@ -74,18 +74,36 @@ module.exports = {
 					console.error("[ERROR] Didn't play audio");
 				}
 			}
-			const members = interaction.member.voice.channel?.members;
-			if (members) {
-				members.forEach(member => {
-					if (!member.user.bot) {
-						if (!member.roles.cache.some((r) => r.name === "The World")) {
-							member.voice.setMute(true);
-							if (!member.roles.cache.some((r) => r.name === "World Invader")) {
-								member.voice.setDeaf(true)
+			if (Global_Vars.allChannels) {
+				interaction.guild.channels.cache.each(channel => {
+					if (channel.type === 2) {
+						const members = channel.members;
+						members.forEach(member => {
+							if (!member.user.bot) {
+								if (!member.roles.cache.some((r) => r.name === "The World")) {
+									member.voice.setMute(true);
+									if (!member.roles.cache.some((r) => r.name === "World Invader")) {
+										member.voice.setDeaf(true)
+									}
+								}
 							}
-						}
+						})
 					}
 				})
+			} else {
+				const members = interaction.member.voice.channel?.members;
+				if (members) {
+					members.forEach(member => {
+						if (!member.user.bot) {
+							if (!member.roles.cache.some((r) => r.name === "The World")) {
+								member.voice.setMute(true);
+								if (!member.roles.cache.some((r) => r.name === "World Invader")) {
+									member.voice.setDeaf(true)
+								}
+							}
+						}
+					})
+				}
 			}
 				console.log('[INFO] Time has stopped!!');
 				
