@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const Global_Vars = require('../../Global_Vars.js');
+const minStop = 5;
 module.exports = {
     data: new SlashCommandBuilder()
 	.setName('set')
@@ -32,9 +33,9 @@ module.exports = {
             const choice = interaction.options.getInteger('seconds');
             // console.log(`[DEV] choice = ${choice}`);
             // console.log(Global_Vars.Time_STOP);
-            if (choice < 5) {
-                interaction.reply({content:`You can't set the duration to ${choice} second(s), it must be 5 or above`, ephemeral: true });
-                console.log(`[WARN] ${interaction.user.tag} tried to set duration less than 5.`);
+            if (choice < minStop) {
+                interaction.reply({content:`You can't set the duration to ${choice} second(s), it must be ${minStop} or above`, ephemeral: true });
+                console.log(`[WARN] ${interaction.user.tag} tried to set duration less than ${minStop}`);
             }
             Global_Vars.Time_STOP = choice;
             // console.log(Global_Vars.Time_STOP);
