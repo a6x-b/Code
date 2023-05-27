@@ -65,13 +65,13 @@ module.exports = {
 				}
 				//*/
 				try {
-					TS = createAudioResource('./audio/ZaWarudoDiego.mp3');
+					TS = createAudioResource('./audio/ZaWarudoDiegoSFX.mp3');
 					audioPlayer.play(TS);
 					setTimeout( () => {audioPlayer.pause()}, 3000);
 				} catch (error) {
 					// await interaction.reply({content:'There was a problem in playing the audio.',ephemeral:true})
 					console.error(error);
-					console.error("[ERROR] Didn't play audio");
+					console.error("[ERROR] Didn't play Time Stop audio");
 				}
 			}
 			if (Global_Vars.allChannels) {
@@ -114,13 +114,13 @@ module.exports = {
 					console.log('[INFO] Time Will resume');
 					// Playing Time Resume Sound
 					try {
-						TR = createAudioResource('./audio/DiegoResume.mp3');
+						TR = createAudioResource('./audio/DiegoResumeSFX.mp3');
 						audioPlayer.play(TR);
 						setTimeout( () => {audioPlayer.stop()}, 2000);
 					} catch (error) {
 						// await interaction.reply({content:'There was a problem in playing the audio.',ephemeral:true})
 						console.error(error);
-						console.error("[ERROR] Didn't play audio");
+						console.error("[ERROR] Didn't play Time Resume audio");
 					}
 					interaction.channel.send("Time will resume.");
 					// Resetting Variable
@@ -143,6 +143,7 @@ module.exports = {
 							connection.destroy();
 						}, 2000);
 					}
+					const members = interaction.member.voice.channel?.members;
 					if (members) {
 						members.forEach(member => {
 							if (!member.user.bot) {
