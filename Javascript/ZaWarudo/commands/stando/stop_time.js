@@ -1,5 +1,4 @@
 const { SlashCommandBuilder } = require('discord.js');
-let Global_Vars = require('../../Global_Vars.js');
 const { createAudioResource } = require('@discordjs/voice');
 const { joinVoiceChannel } = require('@discordjs/voice');
 const { VoiceConnectionStatus } = require('@discordjs/voice');
@@ -25,22 +24,26 @@ module.exports = {
 			return;
 		}
 		if (!worldInvader) console.log('[WARN] the role "World Invader" is not found');
-		if (interaction.member.roles.cache.some((r) => r.name === "The World")) {
-			if (Global_Vars.TimeStopped) {
+		if (interaction.member.id === StandUser.id | interaction.member.id === worldInvader) {
+			if (TimeStopped) {
 				console.error("[WARN] blud tried to stop time, while it's already is.")
 				await interaction.reply({ content:"Time is still stopped, nigga :blush:.", ephemeral: true });
 				return;
 			}
 			console.log('[INFO] Stopping TIME!!');
-			await interaction.reply({content:'https://tenor.com/view/diego-brando-diego-alternate-the-world-za-warudo-gif-17597363', ephemeral: false});
-			Global_Vars.TimeStopped = true;
+			if (character === 'diego')
+				await interaction.reply({content:'https://tenor.com/view/diego-brando-diego-alternate-the-world-za-warudo-gif-17597363', ephemeral: false});
+				else if (character === 'DIO')
+				await interaction.reply({content:'https://tenor.com/view/dio-the-world-appear-the-world-jojo-part3-dio-the-world-gif-18932741', ephemeral: false});
+
+			TimeStopped = true;
 
 			// Make sure that setting every permission to false doesn't affect the stand user
 			// Channels Overwrites map
 			const Channels_OWs = new Map();
 			
 			// Checks if Single or All Channels then stores channel(s) OW into Channels_OW
-			if (Global_Vars.allChannels) {
+			if (allChannels) {
 				interaction.guild.channels.cache.forEach((channel) => {
 					if (channel.isTextBased()) {
 						TextChannels.push(channel);
@@ -59,8 +62,12 @@ module.exports = {
 						interaction.channel.permissionOverwrites.delete(permission.id, 'Time Stopped')
 				});
 			}
-			interaction.channel.permissionOverwrites.create(StandUser, { SendMessages: true, ViewChannel: true });
-			interaction.channel.permissionOverwrites.create(worldInvader, { SendMessages: false, ViewChannel: true });		
+			for (let i = 0; i < TextChannels.length; i++) {
+				const channel = interaction.guild.channels.cache.find (channel => channel.id === TextChannels[i].id)
+				channel.permissionOverwrites.create(channel.guild.roles.everyone, { ViewChannel: false });
+				channel.permissionOverwrites.create(StandUser, { SendMessages: true, ViewChannel: true });
+				channel.permissionOverwrites.create(worldInvader, { SendMessages: false, ViewChannel: true });
+			}
 
 			// Joining VC
 			if (interaction.member.voice.channel) {
@@ -79,9 +86,9 @@ module.exports = {
 				connection.on(VoiceConnectionStatus.Ready, () => { 
 					//*/
 					try {
-						TS = createAudioResource('./audio/ZaWarudoDiegoSFX.mp3');
+						TS = createAudioResource(`./audio/${character}/ZaWarudoSFX.mp3`);
 						audioPlayer.play(TS);
-						setTimeout( () => {audioPlayer.pause()}, 3000);
+						setTimeout( () => {audioPlayer.pause()}, 4500);
 					} catch (error) {
 						// await interaction.reply({content:'There was a problem in playing the audio.',ephemeral:true})
 						console.error(error);
@@ -89,7 +96,7 @@ module.exports = {
 					}
 				});
 			}
-			if (Global_Vars.allChannels) {
+			if (allChannels) {
 				interaction.guild.channels.cache.each(channel => {
 					if (channel.isVoiceBased()) {
 						const members = channel.members;
@@ -130,7 +137,7 @@ module.exports = {
 					console.log('[INFO] Time Will resume');
 					// Playing Time Resume Sound
 					try {
-						TR = createAudioResource('./audio/DiegoResumeSFX.mp3');
+						TR = createAudioResource(`./audio/${character}/ResumeSFX.mp3`);
 						audioPlayer.play(TR);
 						setTimeout( () => {audioPlayer.stop()}, 2000);
 					} catch (error) {
@@ -140,7 +147,7 @@ module.exports = {
 					}
 					interaction.channel.send("Time will move again.").then((msg) => {setTimeout(() => msg.delete(), 3500);});
 					// Resetting Variable
-					Global_Vars.TimeStopped = false;
+					TimeStopped = false;
 					
 					Channels_OWs.forEach((Cache, ID) => {
 						const Channel = interaction.guild.channels.cache.find(channel => channel.id === ID);
@@ -165,9 +172,8 @@ module.exports = {
 							}
 						})
 					}
-				}, Global_Vars.Time_STOP * 1000);
-			}
-			else {
+				}, Duration * 1000);
+			} else {
 				await interaction.reply({ content:"You can't stop time because you are not my user.", ephemeral: true });
 				console.log(`[INFO] ${interaction.user.tag} isn't the user.`);
 		}
