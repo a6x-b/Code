@@ -1,5 +1,4 @@
 const { SlashCommandBuilder } = require('discord.js');
-const Global_Vars = require('../../Global_Vars.js');
 const minStop = 5;
 module.exports = {
     data: new SlashCommandBuilder()
@@ -22,6 +21,18 @@ module.exports = {
             )
         )
     )
+    .addSubcommand(subcommand =>
+        subcommand
+        .setName('character')
+        .setDescription('Select the character that will stop time')
+        .addStringOption(option => option.setName('character').setDescription('Select the character that will stop time')
+        .setRequired(true)
+            .addChoices(
+                { name: 'DIO', value: 'DIO' },
+                { name: 'Diego Brando', value: 'Diego' }
+            )
+        )
+    )
         //.addUserOption(option => option.setName('target').setDescription('The user'))
         /*.addSubcommand(subcommand =>
             subcommand
@@ -32,30 +43,40 @@ module.exports = {
         if (sub === 'duration') {
             const choice = interaction.options.getInteger('seconds');
             // console.log(`[DEV] choice = ${choice}`);
-            // console.log(Global_Vars.Time_STOP);
+            // console.log(Duration);
             if (choice < minStop) {
                 interaction.reply({content:`You can't set the duration to ${choice} second(s), it must be ${minStop} or above`, ephemeral: true });
                 console.log(`[WARN] ${interaction.user.tag} tried to set duration less than ${minStop}`);
             }
-            Global_Vars.Time_STOP = choice;
-            // console.log(Global_Vars.Time_STOP);
+            Duration = choice;
+            // console.log(Duration);
             interaction.reply({content:`The World now will stop time for ${choice} seconds`, ephemeral: true });
         } else if (sub === 'channels') {
             const choice = interaction.options.getString('option');
             // console.log(choice);
-            // console.log(Global_Vars.allChannels);
+            // console.log(allChannels);
             if (choice === 'All Text Channels')
             {
-                Global_Vars.allChannels = true;
+                allChannels = true;
             } else {
-                Global_Vars.allChannels = false;
+                allChannels = false;
             }
-            console.log(Global_Vars.allChannels);
+            console.log(allChannels);
             
             interaction.reply({content:`The World now is set to stop time in ${choice}`, ephemeral: true });
             console.log(`[INFO] ${interaction.user.tag} set The World to stop time in ${choice}`);
+        } else if (sub === 'character') {
+            const choice = interaction.options.getString('character');
+            
+            character = choice
+            if (choice === 'DIO')
+                Duration = 10
+            else if (choice === 'DIego')
+                Duration = 5
+            interaction.reply({content:`The World now is set to stop time in ${choice}`, ephemeral: true });
+            console.log(`[INFO] ${interaction.user.tag} set The World to stop time in ${choice}`);
         }
-        Global_Vars.saveSettings()
+        saveSettings()
         // const number = interaction.options.getSubcommand('seconds');
     }
         };
