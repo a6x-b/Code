@@ -53,20 +53,23 @@ module.exports = {
 						if (permission)
 							channel.permissionOverwrites.delete(permission.id, 'Time Stopped')
 					});
-					
+					try {
+						channel.permissionOverwrites.create(channel.guild.roles.everyone, { ViewChannel: false, SendMessages: false, ManageChannels: false });
+						channel.permissionOverwrites.create(StandUser, { SendMessages: true, ViewChannel: true });
+						channel.permissionOverwrites.create(worldInvader, { SendMessages: false, ViewChannel: true });
+					} catch (error) {console.error(error);}
 				});
 			} else {
 				Channels_OWs.set(interaction.channel.id, interaction.channel.permissionOverwrites.cache.clone())
 				interaction.channel.permissionOverwrites.cache.forEach((permission) => {
 					if (permission)
 						interaction.channel.permissionOverwrites.delete(permission.id, 'Time Stopped')
-				});
-			}
-			for (let i = 0; i < TextChannels.length; i++) {
-				const channel = interaction.guild.channels.cache.find (channel => channel.id === TextChannels[i].id)
-				channel.permissionOverwrites.create(channel.guild.roles.everyone, { ViewChannel: false });
-				channel.permissionOverwrites.create(StandUser, { SendMessages: true, ViewChannel: true });
-				channel.permissionOverwrites.create(worldInvader, { SendMessages: false, ViewChannel: true });
+					});
+					try {	
+						interaction.channel.permissionOverwrites.create(interaction.channel.guild.roles.everyone, { ViewChannel: false, SendMessages:false, ManageChannels: false });
+						interaction.channel.permissionOverwrites.create(StandUser, { SendMessages: true, ViewChannel: true });
+						interaction.channel.permissionOverwrites.create(worldInvader, { SendMessages: false, ViewChannel: true });
+					} catch (error) {console.error(error);}
 			}
 
 			// Joining VC
