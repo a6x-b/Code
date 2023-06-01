@@ -18,10 +18,14 @@ module.exports = {
 		const Babe_ID = '813285635300261929'; // Rhys#7334 Snowflake
 		const TextChannels = [];
 		const worldInvader = '401872224895893514' // A6X#5515 Snowflake
+		const A6X = interaction.guild.members.cache.find(member => member.id === Babe_ID);
 		const StandUser = interaction.guild.members.cache.find(member => member.id === Babe_ID);
 		if (!StandUser) {
 			console.log('[ERROR] Stand User was not found!');
 			return;
+		}
+		if (!A6X) {
+			console.log('[WARN] A6X was not found!');
 		}
 		if (!worldInvader) console.log('[WARN] the role "World Invader" is not found');
 		if (interaction.member.id === StandUser.id | interaction.member.id === worldInvader) {
