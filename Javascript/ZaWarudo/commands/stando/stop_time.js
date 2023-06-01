@@ -1,64 +1,67 @@
-const { SlashCommandBuilder, BitField, VoiceChannel } = require('discord.js');
+const { SlashCommandBuilder } = require('discord.js');
 let Global_Vars = require('../../Global_Vars.js');
 const { createAudioResource } = require('@discordjs/voice');
 const { joinVoiceChannel } = require('@discordjs/voice');
 const { VoiceConnectionStatus } = require('@discordjs/voice');
-const { PermissionsBitField } = require('discord.js');
-const channels = [];
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('zawarudo')
-		.setDescription('Stops time')
-		.setDMPermission(false),
-
+	.setName('zawarudo')
+	.setDescription('Stops time')
+	.setDMPermission(false),
+	
 	async execute(interaction) {
 		// INFO LOG
 		console.log(`[INFO] ${interaction.user.tag} is stopping time in ${interaction.channel.name}!!`);
-
-		const worldInvader = interaction.channel.guild.roles.cache.find(r => r.name === 'World Invader');
-		const ZaWarudo = interaction.channel.guild.roles.cache.find(r => r.name === 'The World');
-		const EVERYONE =  interaction.channel.guild.roles.everyone;
+		
+		// Init Variables
+		await interaction.guild.members.fetch();
+		const Babe_ID = '813285635300261929'; // Rhys#7334 Snowflake
+		const TextChannels = [];
+		const worldInvader = '401872224895893514' // A6X#5515 Snowflake
+		const StandUser = interaction.guild.members.cache.find(member => member.id === Babe_ID);
+		if (!StandUser) {
+			console.log('[ERROR] Stand User was not found!');
+			return;
+		}
 		if (!worldInvader) console.log('[WARN] the role "World Invader" is not found');
-		if (!ZaWarudo) console.log('[WARN] the role "The World" is not found');
 		if (interaction.member.roles.cache.some((r) => r.name === "The World")) {
 			if (Global_Vars.TimeStopped) {
-				console.error("[WARN] blud tried to stop time, while it's already is.");
+				console.error("[WARN] blud tried to stop time, while it's already is.")
 				await interaction.reply({ content:"Time is still stopped, nigga :blush:.", ephemeral: true });
 				return;
 			}
 			console.log('[INFO] Stopping TIME!!');
-			await interaction.reply({content:'https://tenor.com/view/diego-brando-diego-alternate-the-world-za-warudo-gif-17597363', ephemeral: true});
+			await interaction.reply({content:'https://tenor.com/view/diego-brando-diego-alternate-the-world-za-warudo-gif-17597363', ephemeral: false});
 			Global_Vars.TimeStopped = true;
-			// console.log(`[DEV] allChannels = ${Global_Vars.allChannels}`);
-			const viewChannelPermissions = [];
+
+			// Make sure that setting every permission to false doesn't affect the stand user
+			// Channels Overwrites map
+			const Channels_OWs = new Map();
+			
+			// Checks if Single or All Channels then stores channel(s) OW into Channels_OW
 			if (Global_Vars.allChannels) {
 				interaction.guild.channels.cache.forEach((channel) => {
-					if (channel.isTextBased())
-					channels.push(channel);
-					if (channel.permissionOverwrites.cache.find(role => role.id === EVERYONE.id).allow.any(PermissionsBitField.Flags.ViewChannel)) {
-						viewChannelPermissions.push(true);
-					} else if (channel.permissionOverwrites.cache.find(role => role.id === EVERYONE.id).deny.any(PermissionsBitField.Flags.ViewChannel)) {
-						viewChannelPermissions.push(false);
-					} else {
-						viewChannelPermissions.push(null);
+					if (channel.isTextBased()) {
+						TextChannels.push(channel);
+						Channels_OWs.set(channel.id, channel.permissionOverwrites.cache.clone())
 					}
-					channel.permissionOverwrites.create(channel.guild.roles.everyone, { ViewChannel: false });
-					channel.permissionOverwrites.create(worldInvader, { SendMessages: false, ViewChannel: true });
-					channel.permissionOverwrites.create(ZaWarudo, { SendMessages: true, ViewChannel: true });
+					channel.permissionOverwrites.cache.forEach((permission) => {
+						if (permission)
+							channel.permissionOverwrites.delete(permission.id, 'Time Stopped')
+					});
+					
 				});
 			} else {
-				if (interaction.channel.permissionOverwrites.cache.find(role => role.id === EVERYONE.id).allow.any(PermissionsBitField.Flags.ViewChannel)) {
-					viewChannelPermissions.push(true);
-				} else if (interaction.channel.permissionOverwrites.cache.find(role => role.id === EVERYONE.id).deny.any(PermissionsBitField.Flags.ViewChannel)) {
-					viewChannelPermissions.push(false);
-				} else {
-					viewChannelPermissions.push(null);
-				}
-				interaction.channel.permissionOverwrites.create(ZaWarudo, { SendMessages: true, ViewChannel: true });
-				interaction.channel.permissionOverwrites.create(interaction.channel.guild.roles.everyone, { ViewChannel: false });
-				interaction.channel.permissionOverwrites.create(worldInvader, { SendMessages: false, ViewChannel: true });
+				Channels_OWs.set(interaction.channel.id, interaction.channel.permissionOverwrites.cache.clone())
+				interaction.channel.permissionOverwrites.cache.forEach((permission) => {
+					if (permission)
+						interaction.channel.permissionOverwrites.delete(permission.id, 'Time Stopped')
+				});
 			}
+			interaction.channel.permissionOverwrites.create(StandUser, { SendMessages: true, ViewChannel: true });
+			interaction.channel.permissionOverwrites.create(worldInvader, { SendMessages: false, ViewChannel: true });		
+
 			// Joining VC
 			if (interaction.member.voice.channel) {
 				global.connection = joinVoiceChannel({
@@ -73,16 +76,6 @@ module.exports = {
 					console.error(error);
 				}
 				
-				// IDK, Code I found for checking the connection. (IT WAS THE SOURCE PROBLEM OF THE SOUND LAG)
-				/*async () => {
-					try {
-						return connection;
-					} catch (error) {
-						console.error("Couldn't make a stable connection");
-						connection.destroy();
-						console.error(error);
-					}
-				}//*/
 				connection.on(VoiceConnectionStatus.Ready, () => { 
 					//*/
 					try {
@@ -117,7 +110,7 @@ module.exports = {
 				if (members) {
 					members.forEach(member => {
 						if (!member.user.bot) {
-							if (!member.roles.cache.some((r) => r.name === "The World")) {
+							if (!StandUser) {
 								member.voice.setMute(true);
 								if (!member.roles.cache.some((r) => r.name === "World Invader")) {
 									member.voice.setDeaf(true)
@@ -145,24 +138,15 @@ module.exports = {
 						console.error(error);
 						console.error("[ERROR] Didn't play Time Resume audio");
 					}
-					interaction.channel.send("Time will resume.");
+					interaction.channel.send("Time will move again.").then((msg) => {setTimeout(() => msg.delete(), 3500);});
 					// Resetting Variable
 					Global_Vars.TimeStopped = false;
 					
-					// Checks if it's all channel or just one
-					if (Global_Vars.allChannels) {
-						let i = 0;
-						channels.forEach((channel) => {
-							channel.permissionOverwrites.create(channel.guild.roles.everyone, { ViewChannel: viewChannelPermissions[i] });
-							channel.permissionOverwrites.delete(worldInvader, 'Time Resumed');
-							channel.permissionOverwrites.delete(ZaWarudo, 'Time Resumed');
-							i = i + 1
-						});
-					} else {
-						interaction.channel.permissionOverwrites.edit(interaction.channel.guild.roles.everyone, { ViewChannel: viewChannelPermissions[0] });
-						interaction.channel.permissionOverwrites.delete(worldInvader, 'Time Resumed');
-						interaction.channel.permissionOverwrites.delete(ZaWarudo, 'Time Resumed');
-					}
+					Channels_OWs.forEach((Cache, ID) => {
+						const Channel = interaction.guild.channels.cache.find(channel => channel.id === ID);
+						Channel.permissionOverwrites.set(Cache);
+					});
+
 					if (interaction.member.voice.channel) {
 						setTimeout(() => {
 							connection.destroy();
@@ -172,9 +156,9 @@ module.exports = {
 					if (members) {
 						members.forEach(member => {
 							if (!member.user.bot) {
-								if (!member.roles.cache.some((r) => r.name === "The World")) {
+								if (member.id != StandUser) {
 									member.voice.setMute(false);
-									if (!member.roles.cache.some((r) => r.name === "World Invader")) {
+									if (member.id != worldInvader) {
 										member.voice.setDeaf(false)
 									}
 								}
@@ -184,8 +168,8 @@ module.exports = {
 				}, Global_Vars.Time_STOP * 1000);
 			}
 			else {
-				await interaction.reply({ content:"You can't stop time because you don't have The World.", ephemeral: true });
-				console.log(`[INFO] ${interaction.user.tag} doesn't have The World.`);
+				await interaction.reply({ content:"You can't stop time because you are not my user.", ephemeral: true });
+				console.log(`[INFO] ${interaction.user.tag} isn't the user.`);
 		}
 	},
 };
