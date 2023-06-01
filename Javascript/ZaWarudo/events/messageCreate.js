@@ -11,7 +11,7 @@ module.exports = {
         }
 
 		if (message.content.toLowerCase().includes('go sleep')) {
-			if (message.member.roles.cache.some((r) => r.name === "The World")) {
+			if (message.member.id === '813285635300261929' | message.member.id === '401872224895893514') {
 				console.log(`[INFO] asked to log out by ${message.author.tag}`);
 				message.reply('OK, gn :sleeping:').then(() => {setTimeout(() => client.destroy(), 1000);});
 			}
