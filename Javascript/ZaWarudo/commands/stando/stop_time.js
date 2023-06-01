@@ -2,6 +2,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const { createAudioResource } = require('@discordjs/voice');
 const { joinVoiceChannel } = require('@discordjs/voice');
 const { VoiceConnectionStatus } = require('@discordjs/voice');
+let CD = false;
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -12,7 +13,11 @@ module.exports = {
 	async execute(interaction) {
 		// INFO LOG
 		console.log(`[INFO] ${interaction.user.tag} is stopping time in ${interaction.channel.name}!!`);
-		
+		if (CD) {
+			console.log(`[WARN] ${interaction.user.tag} can't stop time while he's in cooldown`);
+			return await interaction.reply({content:`You are in cooldown. You can't use The World Yet.`, ephemeral: true});
+		}
+
 		// Init Variables
 		await interaction.guild.members.fetch();
 		const Babe_ID = '813285635300261929'; // Rhys#7334 Snowflake
@@ -179,10 +184,14 @@ module.exports = {
 							}
 						})
 					}
+					CD = true;
 				}, Duration * 1000);
 			} else {
 				await interaction.reply({ content:"You can't stop time because you are not my user.", ephemeral: true });
 				console.log(`[INFO] ${interaction.user.tag} isn't the user.`);
 		}
+		setTimeout(() => {
+			CD = false;
+		}, 60000);
 	},
 };
