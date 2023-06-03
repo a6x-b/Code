@@ -32,12 +32,7 @@ module.exports = {
                 { name: 'Diego Brando', value: 'Diego' }
             )
         )
-    )
-        //.addUserOption(option => option.setName('target').setDescription('The user'))
-        /*.addSubcommand(subcommand =>
-            subcommand
-			.setName('server')
-			.setDescription('Info about the server'))*/,
+    ),
     async execute(interaction) {
         const sub = interaction.options.getSubcommand('option');
         if (sub === 'duration') {
@@ -49,12 +44,9 @@ module.exports = {
                 console.log(`[WARN] ${interaction.user.tag} tried to set duration less than ${minStop}`);
             }
             Duration = choice;
-            // console.log(Duration);
             interaction.reply({content:`The World now will stop time for ${choice} seconds`, ephemeral: true });
         } else if (sub === 'channels') {
             const choice = interaction.options.getString('option');
-            // console.log(choice);
-            // console.log(allChannels);
             if (choice === 'All Text Channels')
             {
                 allChannels = true;
@@ -71,12 +63,11 @@ module.exports = {
             character = choice
             if (choice === 'DIO')
                 Duration = 10
-            else if (choice === 'DIego')
+            else if (choice === 'Diego')
                 Duration = 5
             interaction.reply({content:`The World now is set to stop time in ${choice}`, ephemeral: true });
-            console.log(`[INFO] ${interaction.user.tag} set The World to stop time in ${choice}`);
+            console.log(`[INFO] ${interaction.user.tag} set The World to stop time as ${choice}`);
         }
         saveSettings()
-        // const number = interaction.options.getSubcommand('seconds');
     }
-        };
+};
