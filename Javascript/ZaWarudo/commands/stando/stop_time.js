@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, channelLink } = require('discord.js');
 const { createAudioResource } = require('@discordjs/voice');
 const { joinVoiceChannel } = require('@discordjs/voice');
 const { VoiceConnectionStatus } = require('@discordjs/voice');
@@ -20,6 +20,7 @@ module.exports = {
 
 		// Init Variables
 		await interaction.guild.members.fetch();
+		await interaction.guild.channels.fetch();
 		const standUserID = '813285635300261929'; // Rhys#7334 Snowflake
 		const worldInvader = '401872224895893514' // A6X#5515 Snowflake
 		const A6X = interaction.guild.members.cache.find(member => member.id === standUserID);
@@ -35,7 +36,7 @@ module.exports = {
 		if (interaction.member.id === StandUser.id | interaction.member.id === worldInvader) {
 			if (TimeStopped) {
 				console.error(`[WARN] blud named ${interaction.user.tag} tried to stop time, while it's already is.`)
-				await interaction.reply({ content: "Time is still stopped, nigga :blush:.", ephemeral: true });
+				await interaction.reply({ content: "Time is still stopped :blush:.", ephemeral: true });
 				return;
 			}
 			console.log('[INFO] Stopping Time!');
@@ -49,40 +50,45 @@ module.exports = {
 			// Make sure that setting every permission to false doesn't affect the stand user
 			// Channels Overwrites map
 			const Channels_OWs = new Map();
-
+			const Syncs = new Map();
 			// Checks if Single or All Channels then stores channel(s) OW into Channels_OW
 			if (allChannels) {
-				interaction.guild.channels.cache.forEach((channel) => {
-					if ((channel.isTextBased() && !channel.permissionsLocked) || channel.type === 4) {
-						Channels_OWs.set(channel.id, channel.permissionOverwrites.cache.clone())
-						channel.permissionOverwrites.cache.forEach((permission) => {
+			interaction.guild.channels.cache.forEach(async (channel, ID) => {
+				Syncs.set(ID, channel.permissionsLocked);
+				// if (channel.parentId === '1116222629913837581') {
+				console.log(`Channel Name: ${channel.name}, parent: ${channel.parent}, Synced: ${channel.permissionsLocked}, isText: ${channel.isTextBased()}`);
+				console.log(`Name: ${channel.name} (${channel.isTextBased()} & ${!channel.permissionsLocked}) | ${!channel.parent} => ${(channel.isTextBased() && !channel.permissionsLocked) || (!channel.parent)}`);
+				if ((channel.isTextBased() & !channel.permissionsLocked) | (!channel.parent)) {
+					Channels_OWs.set(channel.id, channel.permissionOverwrites.cache.clone())
+					channel.permissionOverwrites.cache.forEach((permission) => {
 						if (permission)
-							channel.permissionOverwrites.delete(permission.id, 'Time Stopped')
-						});
-						channel.permissionOverwrites.create(channel.guild.roles.everyone, { ViewChannel: false, SendMessages: false, ManageChannels: false });
-						channel.permissionOverwrites.create(StandUser, { SendMessages: true, ViewChannel: true });
-						channel.permissionOverwrites.create(worldInvader, { SendMessages: false, ViewChannel: true });
-					}
-				});
+						channel.permissionOverwrites.delete(permission.id, 'Time Stopped')
+					});
+					await channel.permissionOverwrites.create(StandUser, { SendMessages: true, ViewChannel: true });
+					await channel.permissionOverwrites.create(worldInvader, { SendMessages: false, ViewChannel: true });
+					await channel.permissionOverwrites.create(channel.guild.roles.everyone, { ViewChannel: false, SendMessages: false, ManageChannels: false });
+				}
+				//}
+			});
 			} else {
-				Channels_OWs.set(interaction.channel.id, interaction.channel.permissionOverwrites.cache.clone())
-				interaction.channel.permissionOverwrites.cache.forEach((permission) => {
+				Channels_OWs.set(interaction.channel.id, interaction.channel.permissionOverwrites.cache.clone());
+				Syncs.set(interaction.channel.id, interaction.channel.permissionsLocked);
+				interaction.channel.permissionOverwrites.cache.forEach(async (permission) => {
 					if (permission)
-						interaction.channel.permissionOverwrites.delete(permission.id, 'Time Stopped')
-				});
-				setTimeout(() => {
+						await interaction.channel.permissionOverwrites.delete(permission.id, 'Time Stopped')
+				}).then(() => {
 					try {
-						interaction.channel.permissionOverwrites.create(interaction.channel.guild.roles.everyone, { ViewChannel: false, SendMessages: false, ManageChannels: false });
 						interaction.channel.permissionOverwrites.create(StandUser, { SendMessages: true, ViewChannel: true });
 						interaction.channel.permissionOverwrites.create(worldInvader, { SendMessages: false, ViewChannel: true });
+						interaction.channel.permissionOverwrites.create(interaction.channel.guild.roles.everyone, { ViewChannel: false, SendMessages: false, ManageChannels: false });
 					} catch (error) { console.error(error); }
-				}, 500);
+				});
 			}
 
 			// Joining VC
 			//if (interaction.member.voice.channel) {
 			try {
-				global.connection = joinVoiceChannel({
+				global.connection = await joinVoiceChannel({
 					channelId: interaction.member.voice?.channel?.id,
 					guildId: interaction.member.voice?.channel?.guild.id,
 					adapterCreator: interaction.member.voice?.channel?.guild.voiceAdapterCreator,
@@ -97,9 +103,6 @@ module.exports = {
 						TS = createAudioResource(`./audio/${character}/ZaWarudoSFX.mp3`);
 						audioPlayer.play(TS);
 					});
-				} else {
-					TS = createAudioResource(`./audio/${character}/ZaWarudoSFX.mp3`);
-					audioPlayer.play(TS);
 				}
 
 			//}
@@ -141,7 +144,7 @@ module.exports = {
 			//Time Resuming
 			
 			//audioPlayer.on(AudioPlayerStatus.Idle, () => {
-			setTimeout(() => {
+			setTimeout(async () => {
 				console.log('[INFO] Time Will resume');
 				// Playing Time Resume Sound
 				try {
@@ -156,16 +159,19 @@ module.exports = {
 				interaction.channel.send("Time will move again.").then((msg) => { setTimeout(() => msg.delete(), 2000); });
 				// Resetting Variable
 				TimeStopped = false;
-				Channels_OWs.forEach((Cache, ID) => {
-					const Channel = interaction.guild.channels.cache.find(channel => channel.id === ID);
-					Channel.permissionOverwrites.set(Cache);
+
+				Channels_OWs.forEach(async (Cache, ID) => {
+					const Channel = await interaction.guild.channels.cache.find(channel => channel.id === ID);
+					await Channel.permissionOverwrites.set(Cache);
 				});
-				/*if (interaction.member.voice.channel) {
-					setTimeout(() => {
-						connection.destroy();
-					}, 3000);
-				}*/
-				const members = interaction.member.voice.channel?.members;
+
+				interaction.guild.channels.cache.forEach(async (channel, ID) => {
+					if (Syncs.get(ID)) {
+						await channel.lockPermissions();
+					}
+				});
+
+				const members = await interaction.member.voice.channel?.members;
 				if (members) {
 					members.forEach(member => {
 						if (!member.user.bot) {
@@ -179,7 +185,7 @@ module.exports = {
 					})
 				}
 				CD = true;
-			}, Duration * 1000);
+			}, (Duration + 1) * 1000);
 			//})
 			
 		} else {
