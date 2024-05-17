@@ -16,5 +16,12 @@ module.exports = {
 				message.reply('OK, gn :sleeping:').then(() => {setTimeout(() => client.destroy(), 1000);});
 			}
 		}
+
+		if (message.content.toLowerCase().includes('america ya')) {
+			for (let index = 0; index < 5; index++) {
+				await message.channel.send('Hallo! \\:D');
+                await new Promise(resolve => setTimeout(resolve, 500));
+			}
+		}
 	},
 };
